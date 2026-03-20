@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SUM-MIT Survey — Small Business Netherlands</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #E8521A;
+    --orange-light: #FDF0EA;
+    --orange-mid: #F4A07A;
+    --navy: #0F1F3D;
+    --navy-mid: #1E3260;
+    --slate: #4A5568;
+    --muted: #718096;
+    --border: #E2E8F0;
+    --bg: #FFFFFF;
+    --white: #FFFFFF;
+    --green: #22863A;
+    --green-light: #EAFBF0;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(15,31,61,0.08);
+    --shadow-lg: 0 8px 32px rgba(15,31,61,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px;
+    letter-spacing: -0.5px;
+  }
+  .logo-text { font-weight: 700; font-size: 17px; color: var(--navy); letter-spacing: -0.3px; }
+  .logo-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .lang-toggle {
+    display: flex; gap: 6px;
+  }
+  .lang-btn {
+    border: 1px solid var(--border); background: var(--white);
+    border-radius: 8px; padding: 5px 12px; font-size: 13px;
+    cursor: pointer; font-family: inherit; color: var(--slate);
+    transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: var(--navy); color: white; border-color: var(--navy);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white;
+    padding: 56px 24px 48px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 5vw, 40px);
+    line-height: 1.2;
+    margin-bottom: 16px;
+    max-width: 620px;
+    margin-left: auto; margin-right: auto;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--orange-mid);
+  }
+  .hero p {
+    font-size: 15px; color: rgba(255,255,255,0.75);
+    max-width: 520px; margin: 0 auto 28px;
+  }
+  .hero-badges {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center;
+  }
+  .badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px; padding: 6px 16px;
+    font-size: 13px; color: rgba(255,255,255,0.9);
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    position: sticky;
+    top: 65px;
+    z-index: 90;
+  }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 13px; color: var(--muted); margin-bottom: 8px;
+  }
+  .progress-label strong { color: var(--navy); }
+  .progress-bar-bg {
+    height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--orange);
+    border-radius: 100px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .container { max-width: 760px; margin: 0 auto; padding: 32px 16px 80px; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    display: flex; align-items: center; gap: 10px;
+    margin: 36px 0 16px;
+  }
+  .section-pill {
+    background: var(--navy); color: white;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; padding: 4px 12px; border-radius: 100px;
+  }
+  .section-line {
+    flex: 1; height: 1px; background: var(--border);
+  }
+  .section-name {
+    font-size: 13px; color: var(--muted); font-weight: 500;
+  }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .q-card.answered {
+    border-left: 3px solid var(--orange);
+  }
+  .q-card.error {
+    border-color: #E53E3E;
+    box-shadow: 0 0 0 3px rgba(229,62,62,0.1);
+  }
+
+  .q-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+  .q-num {
+    min-width: 28px; height: 28px;
+    background: var(--orange-light); color: var(--orange);
+    border-radius: 8px; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .q-num.done {
+    background: var(--orange); color: white;
+  }
+  .q-title {
+    font-size: 16px; font-weight: 600; line-height: 1.4; flex: 1;
+  }
+  .q-req { color: var(--orange); margin-left: 2px; }
+  .q-hint {
+    font-size: 13px; color: var(--muted); margin: 4px 0 18px 40px;
+  }
+  .error-msg {
+    font-size: 12px; color: #E53E3E;
+    margin: -6px 0 10px 40px;
+    display: none;
+  }
+  .q-card.error .error-msg { display: block; }
+
+  /* ── RADIO / CHECKBOX OPTIONS ── */
+  .options-grid { display: flex; flex-direction: column; gap: 8px; margin-left: 0; }
+  .options-grid.cols-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+
+  .opt-label {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 16px; border: 1px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .opt-label:hover { border-color: var(--orange); background: var(--orange-light); }
+
+  .opt-label input[type="radio"],
+  .opt-label input[type="checkbox"] {
+    display: none;
+  }
+
+  .opt-custom {
+    width: 18px; height: 18px; border: 2px solid var(--border);
+    background: white; flex-shrink: 0; margin-top: 1px;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .opt-label input[type="radio"] ~ .opt-custom { border-radius: 50%; }
+  .opt-label input[type="checkbox"] ~ .opt-custom { border-radius: 4px; }
+
+  .opt-label input:checked ~ .opt-custom {
+    background: var(--orange); border-color: var(--orange);
+  }
+  .opt-label input[type="radio"]:checked ~ .opt-custom::after {
+    content: ''; width: 6px; height: 6px;
+    background: white; border-radius: 50%;
+  }
+  .opt-label input[type="checkbox"]:checked ~ .opt-custom::after {
+    content: '✓'; color: white; font-size: 11px; font-weight: 700;
+  }
+  .opt-label input:checked ~ .opt-custom + .opt-content-wrap,
+  .opt-label:has(input:checked) { border-color: var(--orange); background: var(--orange-light); }
+
+  .opt-icon { font-size: 20px; line-height: 1; margin-right: 2px; }
+  .opt-text { font-size: 14px; font-weight: 500; line-height: 1.3; }
+  .opt-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 400; }
+
+  /* ── STAR / SCALE RATING ── */
+  .scale-wrap { margin-left: 0; }
+  .scale-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .scale-btn {
+    width: 48px; height: 48px; border-radius: 10px;
+    border: 2px solid var(--border); background: white;
+    font-size: 16px; font-weight: 600; color: var(--slate);
+    cursor: pointer; transition: all 0.15s; font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scale-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+  .scale-btn.selected { border-color: var(--orange); background: var(--orange); color: white; }
+  .scale-labels {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--muted); margin-top: 8px;
+  }
+
+  /* ── PRICING CARDS ── */
+  .pricing-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .price-label {
+    border: 2px solid var(--border); border-radius: 12px;
+    padding: 16px; cursor: pointer; transition: all 0.15s;
+    user-select: none; position: relative;
+  }
+  .price-label:hover { border-color: var(--orange); background: var(--orange-light); }
+  .price-label input { display: none; }
+  .price-label.selected { border-color: var(--orange); background: var(--orange-light); }
+  .price-badge {
+    position: absolute; top: -10px; right: 12px;
+    background: var(--orange); color: white;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 2px 10px; border-radius: 100px; text-transform: uppercase;
+  }
+  .price-range { font-size: 20px; font-weight: 700; color: var(--navy); }
+  .price-tier { font-size: 12px; font-weight: 600; color: var(--orange); margin-top: 2px; }
+  .price-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ── TEXT AREA ── */
+  .q-textarea {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--border); border-radius: 10px;
+    font-family: inherit; font-size: 14px; color: var(--navy);
+    resize: vertical; min-height: 88px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .q-textarea:focus { border-color: var(--orange); }
+  .q-textarea::placeholder { color: var(--muted); }
+
+  /* ── TOOL CHECKBOXES (Q6 sub-section) ── */
+  .tools-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-top: 14px;
+  }
+
+  /* ── SATISFACTION SCALE (Q6 sub) ── */
+  .satisfaction-wrap {
+    margin-top: 20px; padding-top: 18px;
+    border-top: 1px dashed var(--border);
+  }
+  .sat-label { font-size: 13px; font-weight: 500; color: var(--slate); margin-bottom: 10px; }
+
+  /* ── SUBMIT SECTION ── */
+  .submit-section {
+    text-align: center; padding: 40px 20px;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-top: 24px;
+  }
+  .submit-section p { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .submit-btn {
+    background: var(--orange); color: white;
+    border: none; border-radius: 12px;
+    padding: 16px 40px; font-size: 16px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 16px rgba(232,82,26,0.35);
+  }
+  .submit-btn:hover { background: #C9401A; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,82,26,0.4); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-footer {
+    font-size: 12px; color: var(--muted); margin-top: 16px;
+  }
+
+  /* ── THANK YOU ── */
+  #thank-you {
+    display: none;
+    max-width: 520px; margin: 60px auto; text-align: center;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 20px; padding: 56px 40px; box-shadow: var(--shadow-lg);
+  }
+  .ty-emoji { font-size: 56px; margin-bottom: 20px; }
+  .ty-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px; color: var(--navy); margin-bottom: 12px;
+  }
+  .ty-body { font-size: 15px; color: var(--slate); line-height: 1.7; margin-bottom: 28px; }
+  .ty-btn {
+    border: 2px solid var(--border); background: white;
+    border-radius: 10px; padding: 12px 28px;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    color: var(--navy); cursor: pointer; transition: all 0.2s;
+  }
+  .ty-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    text-align: center; font-size: 12px; color: var(--muted);
+    padding: 24px 16px; border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 560px) {
+    .options-grid.cols-2, .pricing-grid, .tools-grid { grid-template-columns: 1fr; }
+    .q-card { padding: 20px; }
+    .hero { padding: 40px 16px 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-mark">SM</div>
+    <div>
+      <div class="logo-text">SUM-MIT</div>
+      <div class="logo-sub">Market Research</div>
+    </div>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active">🇬🇧 English</button>
+    <button class="lang-btn">🇳🇱 Nederlands</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Help Us Build the <em>Right</em> Finance Tool<br>for Your Business</h1>
+  <p>We're building SUM-MIT — an all-in-one accounting platform for small businesses in the Netherlands. Your input shapes everything we build. Takes 4–5 minutes.</p>
+  <div class="hero-badges">
+    <span class="badge">⏱ 4–5 minutes</span>
+    <span class="badge">🔒 Anonymous & GDPR compliant</span>
+    <span class="badge">📋 15 questions</span>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progress</span>
+    <strong><span id="prog-count">0</span> / 15 answered</strong>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+</div>
+
+<!-- SURVEY FORM -->
+<div class="container">
+<form id="survey-form" novalidate>
+
+  <!-- ═══ SECTION A ═══ -->
+  <div class="section-label">
+    <span class="section-pill">A</span>
+    <div class="section-line"></div>
+    <span class="section-name">Business Profile</span>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" id="card-1">
+    <div class="q-header">
+      <span class="q-num" id="num-1">1</span>
+      <div class="q-title">What type of business do you run? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Select the option that best describes your business structure.</div>
+    <div class="error-msg">Please select an option to continue.</div>
+    <div class="options-grid">
+      <label class="opt-label"><input type="radio" name="q1" value="ZZP / Freelancer"><span class="opt-custom"></span><span class="opt-text">ZZP / Freelancer</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="Eenmanszaak"><span class="opt-custom"></span><span class="opt-text">Eenmanszaak / Sole Trader</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="VOF"><span class="opt-custom"></span><span class="opt-text">VOF / Partnership</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="BV"><span class="opt-custom"></span><span class="opt-text">BV / Private Company</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="Stichting"><span class="opt-custom"></span><span class="opt-text">Stichting / Foundation</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="Other"><span class="opt-custom"></span><span class="opt-text">Other</span></label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" id="card-2">
+    <div class="q-header">
+      <span class="q-num" id="num-2">2</span>
+      <div class="q-title">How many employees does your business have? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Including yourself and any part-time staff.</div>
+    <div class="error-msg">Please select an option to continue.</div>
+    <div class="options-grid">
+      <label class="opt-label"><input type="radio" name="q2" value="1"><span class="opt-custom"></span><span class="opt-text">Just me (1)</span></label>
+      <label class="opt-label"><input type="radio" name="q2" value="2-5"><span class="opt-custom"></span><span class="opt-text">2–5 people</span></label>
+      <label class="opt-label"><input type="radio" name="q2" value="6-10"><span class="opt-custom"></span><span class="opt-text">6–10 people</span></label>
+      <label class="opt-label"><input type="radio" name="q2" value="11-25"><span class="opt-custom"></span><span class="opt-text">11–25 people</span></label>
+      <label class="opt-label"><input type="radio" name="q2" value="26+"><span class="opt-custom"></span><span class="opt-text">26+ people</span></label>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" id="card-3">
+    <div class="q-header">
+      <span class="q-num" id="num-3">3</span>
+      <div class="q-title">Which sector does your business operate in? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Choose the closest match.</div>
+    <div class="error-msg">Please select an option to continue.</div>
+    <div class="options-grid cols-2">
+      <label class="opt-label"><input type="radio" name="q3" value="Retail"><span class="opt-custom"></span><span class="opt-text">Retail / Wholesale</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="Horeca"><span class="opt-custom"></span><span class="opt-text">Horeca / Food</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="Consulting"><span class="opt-custom"></span><span class="opt-text">Consulting / Services</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="Tech"><span class="opt-custom"></span><span class="opt-text">Tech / IT</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="Construction"><span class="opt-custom"></span><span class="opt-text">Construction / Trades</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="Creative"><span class="opt-custom"></span><span class="opt-text">Creative / Design</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="Healthcare"><span class="opt-custom"></span><span class="opt-text">Healthcare / Wellness</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="Other"><span class="opt-custom"></span><span class="opt-text">Other</span></label>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION B ═══ -->
+  <div class="section-label">
+    <span class="section-pill">B</span>
+    <div class="section-line"></div>
+    <span class="section-name">Current Accounting Situation</span>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" id="card-4">
+    <div class="q-header">
+      <span class="q-num" id="num-4">4</span>
+      <div class="q-title">How do you currently manage your accounting and finances? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">You may select more than one.</div>
+    <div class="error-msg">Please select at least one option.</div>
+    <div class="options-grid">
+      <label class="opt-label">
+        <input type="checkbox" name="q4" value="accountant">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">👨‍💼</span> <span class="opt-text">I use an external accountant / bookkeeper</span><div class="opt-sub">Monthly or quarterly visits / calls</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q4" value="software">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">💻</span> <span class="opt-text">I use accounting software (Exact, Snelstart, Moneybird, etc.)</span><div class="opt-sub">Self-managed digital tools</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q4" value="spreadsheets">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">📊</span> <span class="opt-text">Spreadsheets (Excel / Google Sheets)</span><div class="opt-sub">Manual tracking in spreadsheets</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q4" value="paper">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">📁</span> <span class="opt-text">Mostly paper / informal records</span><div class="opt-sub">No digital system yet</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q4" value="none">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">🤷</span> <span class="opt-text">I don't have a structured system</span><div class="opt-sub">Looking for a solution</div></div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" id="card-5">
+    <div class="q-header">
+      <span class="q-num" id="num-5">5</span>
+      <div class="q-title">What is your biggest pain point with managing finances today? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Select your single biggest frustration.</div>
+    <div class="error-msg">Please select an option to continue.</div>
+    <div class="options-grid">
+      <label class="opt-label"><input type="radio" name="q5" value="BTW filing"><span class="opt-custom"></span><span class="opt-text">BTW (VAT) filing is complicated</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="Invoices"><span class="opt-custom"></span><span class="opt-text">Creating & tracking invoices</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="Expenses"><span class="opt-custom"></span><span class="opt-text">Tracking expenses & receipts</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="Cash flow"><span class="opt-custom"></span><span class="opt-text">Understanding cash flow</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="Admin time"><span class="opt-custom"></span><span class="opt-text">Too much admin time</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="Accountant cost"><span class="opt-custom"></span><span class="opt-text">Accountant is too expensive</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="Complex software"><span class="opt-custom"></span><span class="opt-text">Software is too complex / in English only</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="Payroll"><span class="opt-custom"></span><span class="opt-text">Payroll & salary calculations</span></label>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" id="card-6">
+    <div class="q-header">
+      <span class="q-num" id="num-6">6</span>
+      <div class="q-title">Have you ever used a digital / cloud-based accounting tool before? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Include any app, software or online platform — even if you stopped using it.</div>
+    <div class="error-msg">Please select an option to continue.</div>
+    <div class="options-grid">
+      <label class="opt-label"><input type="radio" name="q6_use" value="yes_now"><span class="opt-custom"></span><span class="opt-text">✅ Yes — I use one now</span></label>
+      <label class="opt-label"><input type="radio" name="q6_use" value="yes_switched"><span class="opt-custom"></span><span class="opt-text">🔄 Yes — but I switched away</span></label>
+      <label class="opt-label"><input type="radio" name="q6_use" value="trial"><span class="opt-custom"></span><span class="opt-text">🆓 Tried a free trial only</span></label>
+      <label class="opt-label"><input type="radio" name="q6_use" value="never"><span class="opt-custom"></span><span class="opt-text">❌ No — never used one</span></label>
+    </div>
+
+    <!-- Tool sub-section shown only if not "never" -->
+    <div id="q6-tools" style="display:none; margin-top:18px; padding-top:18px; border-top:1px dashed var(--border);">
+      <div class="sat-label">Which tool(s) have you used? Select all that apply.</div>
+      <div class="tools-grid">
+        <label class="opt-label"><input type="checkbox" name="q6_tools" value="Moneybird"><span class="opt-custom"></span><div><span class="opt-icon">🐦</span> <span class="opt-text">Moneybird</span><div class="opt-sub">Popular Dutch cloud invoicing</div></div></label>
+        <label class="opt-label"><input type="checkbox" name="q6_tools" value="SnelStart"><span class="opt-custom"></span><div><span class="opt-icon">⚡</span> <span class="opt-text">SnelStart</span><div class="opt-sub">Dutch SME accounting software</div></div></label>
+        <label class="opt-label"><input type="checkbox" name="q6_tools" value="Exact"><span class="opt-custom"></span><div><span class="opt-icon">📐</span> <span class="opt-text">Exact Online</span><div class="opt-sub">Enterprise ERP / accounting</div></div></label>
+        <label class="opt-label"><input type="checkbox" name="q6_tools" value="Twinfield"><span class="opt-custom"></span><div><span class="opt-icon">🔢</span> <span class="opt-text">Twinfield</span><div class="opt-sub">Cloud accounting for accountants</div></div></label>
+        <label class="opt-label"><input type="checkbox" name="q6_tools" value="International"><span class="opt-custom"></span><div><span class="opt-icon">📒</span> <span class="opt-text">QuickBooks / Xero / Sage</span><div class="opt-sub">International cloud accounting</div></div></label>
+        <label class="opt-label"><input type="checkbox" name="q6_tools" value="Other"><span class="opt-custom"></span><div><span class="opt-icon">🔧</span> <span class="opt-text">Other / Custom tool</span></div></label>
+      </div>
+      <div class="satisfaction-wrap">
+        <div class="sat-label">How satisfied were you overall with that tool?</div>
+        <div class="scale-buttons" id="scale-q6s">
+          <button type="button" class="scale-btn" data-val="1" data-group="q6s">1</button>
+          <button type="button" class="scale-btn" data-val="2" data-group="q6s">2</button>
+          <button type="button" class="scale-btn" data-val="3" data-group="q6s">3</button>
+          <button type="button" class="scale-btn" data-val="4" data-group="q6s">4</button>
+          <button type="button" class="scale-btn" data-val="5" data-group="q6s">5</button>
+        </div>
+        <div class="scale-labels"><span>Very Dissatisfied</span><span>Very Satisfied</span></div>
+        <input type="hidden" name="q6_satisfaction" id="q6s-val" value="">
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" id="card-7">
+    <div class="q-header">
+      <span class="q-num" id="num-7">7</span>
+      <div class="q-title">What challenges did existing tools fail to solve for you? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Select all that apply — even if you've never used a tool, tell us what you fear most.</div>
+    <div class="error-msg">Please select at least one option.</div>
+    <div class="options-grid">
+      <label class="opt-label"><input type="checkbox" name="q7" value="Not Dutch"><span class="opt-custom"></span><div><span class="opt-icon">🇳🇱</span> <span class="opt-text">Not available in Dutch or hard to understand</span><div class="opt-sub">Interface, help content and support all in English only</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="BTW wrong"><span class="opt-custom"></span><div><span class="opt-icon">📋</span> <span class="opt-text">BTW / VAT rules were not handled correctly</span><div class="opt-sub">Wrong rates, missed exemptions, no ICP support</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="Expensive"><span class="opt-custom"></span><div><span class="opt-icon">💸</span> <span class="opt-text">Too expensive for what it offered</span><div class="opt-sub">Paying for features I never use</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="Complex"><span class="opt-custom"></span><div><span class="opt-icon">🧩</span> <span class="opt-text">Too complex — needed an accountant to operate it anyway</span><div class="opt-sub">Steep learning curve, too many settings</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="No mobile"><span class="opt-custom"></span><div><span class="opt-icon">📱</span> <span class="opt-text">No good mobile app for on-the-go capture</span><div class="opt-sub">Couldn't scan receipts or add transactions from my phone</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="Bad support"><span class="opt-custom"></span><div><span class="opt-icon">🎧</span> <span class="opt-text">Poor customer support — no Dutch-speaking help</span><div class="opt-sub">Slow responses, chatbots, no human available</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="Bank integration"><span class="opt-custom"></span><div><span class="opt-icon">🏦</span> <span class="opt-text">Bank integration was broken or not available for Dutch banks</span><div class="opt-sub">ING, Rabobank, ABN AMRO not properly supported</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="No payroll"><span class="opt-custom"></span><div><span class="opt-icon">👥</span> <span class="opt-text">Payroll / salary calculations were missing or inaccurate</span><div class="opt-sub">Loonheffing not calculated correctly</div></div></label>
+      <label class="opt-label"><input type="checkbox" name="q7" value="Security"><span class="opt-custom"></span><div><span class="opt-icon">⚠️</span> <span class="opt-text">Concerns about data security or losing my records</span><div class="opt-sub">GDPR compliance, data stored outside EU</div></div></label>
+    </div>
+    <div style="margin-top:14px;">
+      <textarea class="q-textarea" name="q7_other" placeholder="Anything else a tool failed to solve? (optional)"></textarea>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION C ═══ -->
+  <div class="section-label">
+    <span class="section-pill">C</span>
+    <div class="section-line"></div>
+    <span class="section-name">SUM-MIT App Utility</span>
+  </div>
+
+  <!-- Q8 — FIXED: was a broken checkbox-only feature selector -->
+  <div class="q-card" id="card-8">
+    <div class="q-header">
+      <span class="q-num" id="num-8">8</span>
+      <div class="q-title">How useful would the following SUM-MIT features be for your business? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Select all features you would actively use.</div>
+    <div class="error-msg">Please select at least one feature.</div>
+    <div class="options-grid" id="q8-options">
+      <label class="opt-label">
+        <input type="checkbox" name="q8" value="OCR scanning">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">📸</span> <span class="opt-text">Scan invoices & receipts with your phone camera (OCR)</span><div class="opt-sub">Point, shoot — data extracted automatically</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q8" value="Voice commands">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">🎤</span> <span class="opt-text">Voice commands to record transactions in Dutch</span><div class="opt-sub">Say "Factuur van ABC, €500" and it's booked</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q8" value="BTW auto">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">🇳🇱</span> <span class="opt-text">Automatic BTW calculation and filing preparation</span><div class="opt-sub">Never miss a BTW deadline again</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q8" value="Bank import">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">🏦</span> <span class="opt-text">Import bank statements from ING, Rabobank, ABN AMRO</span><div class="opt-sub">Auto-categorise all transactions from your bank CSV</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q8" value="Invoicing">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">🧾</span> <span class="opt-text">Professional invoice creation and tracking</span><div class="opt-sub">Send, track and get paid faster</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q8" value="PL reports">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">📊</span> <span class="opt-text">Real-time P&L and cash flow reports</span><div class="opt-sub">Always know your financial position</div></div>
+      </label>
+      <label class="opt-label">
+        <input type="checkbox" name="q8" value="Payroll">
+        <span class="opt-custom"></span>
+        <div><span class="opt-icon">👥</span> <span class="opt-text">Payroll calculation and payslip generation</span><div class="opt-sub">Loonheffing, social contributions, net pay</div></div>
+      </label>
+    </div>
+    <!-- Hidden input to track that at least one is selected -->
+    <input type="hidden" name="q8_valid" id="q8-valid" value="">
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card" id="card-9">
+    <div class="q-header">
+      <span class="q-num" id="num-9">9</span>
+      <div class="q-title">How likely are you to use a mobile app to capture invoices and record expenses on the go? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Rate from 1 (Very Unlikely) to 5 (Very Likely).</div>
+    <div class="error-msg">Please select a rating.</div>
+    <div class="scale-wrap">
+      <div class="scale-buttons" id="scale-q9">
+        <button type="button" class="scale-btn" data-val="1" data-group="q9">1</button>
+        <button type="button" class="scale-btn" data-val="2" data-group="q9">2</button>
+        <button type="button" class="scale-btn" data-val="3" data-group="q9">3</button>
+        <button type="button" class="scale-btn" data-val="4" data-group="q9">4</button>
+        <button type="button" class="scale-btn" data-val="5" data-group="q9">5</button>
+      </div>
+      <div class="scale-labels"><span>Very Unlikely</span><span>Very Likely</span></div>
+      <input type="hidden" name="q9" id="q9-val" value="">
+    </div>
+  </div>
+
+  <!-- ═══ SECTION D ═══ -->
+  <div class="section-label">
+    <span class="section-pill">D</span>
+    <div class="section-line"></div>
+    <span class="section-name">Pricing Comfort</span>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card" id="card-10">
+    <div class="q-header">
+      <span class="q-num" id="num-10">10</span>
+      <div class="q-title">What monthly subscription price would you be comfortable paying for an all-in-one accounting platform like SUM-MIT? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">This would replace your current accounting costs. Choose the range that feels fair for your business.</div>
+    <div class="error-msg">Please select a price range.</div>
+    <div class="pricing-grid" id="pricing-grid">
+      <label class="price-label" id="pl-1">
+        <input type="radio" name="q10" value="<100">
+        <div class="price-range">&lt; €100</div>
+        <div class="price-tier">Budget Range</div>
+        <div class="price-desc">Up to €99 / month incl. BTW</div>
+      </label>
+      <label class="price-label" id="pl-2" style="position:relative;">
+        <span class="price-badge">Most Popular</span>
+        <input type="radio" name="q10" value="100-150">
+        <div class="price-range">€100 – €150</div>
+        <div class="price-tier">Standard Range</div>
+        <div class="price-desc">€100–€150 / month incl. BTW</div>
+      </label>
+      <label class="price-label" id="pl-3">
+        <input type="radio" name="q10" value="150-200">
+        <div class="price-range">€150 – €200</div>
+        <div class="price-tier">Professional Range</div>
+        <div class="price-desc">€150–€200 / month incl. BTW</div>
+      </label>
+      <label class="price-label" id="pl-4">
+        <input type="radio" name="q10" value=">200">
+        <div class="price-range">&gt; €200</div>
+        <div class="price-tier">Enterprise Range</div>
+        <div class="price-desc">More than €200 / month incl. BTW</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-card" id="card-11">
+    <div class="q-header">
+      <span class="q-num" id="num-11">11</span>
+      <div class="q-title">What would make you willing to pay MORE for an accounting app? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Select all that apply.</div>
+    <div class="error-msg">Please select at least one option.</div>
+    <div class="options-grid">
+      <label class="opt-label"><input type="checkbox" name="q11" value="Accountant link"><span class="opt-custom"></span><div><span class="opt-icon">🔗</span> <span class="opt-text">Direct connection to my accountant (they can view my books)</span></div></label>
+      <label class="opt-label"><input type="checkbox" name="q11" value="One-click BTW"><span class="opt-custom"></span><div><span class="opt-icon">📋</span> <span class="opt-text">One-click BTW/tax return filing to Belastingdienst</span></div></label>
+      <label class="opt-label"><input type="checkbox" name="q11" value="AI advice"><span class="opt-custom"></span><div><span class="opt-icon">🤖</span> <span class="opt-text">AI financial advice and tax tips in Dutch</span></div></label>
+      <label class="opt-label"><input type="checkbox" name="q11" value="Multi BV"><span class="opt-custom"></span><div><span class="opt-icon">🏢</span> <span class="opt-text">Support for multiple business entities / BVs</span></div></label>
+      <label class="opt-label"><input type="checkbox" name="q11" value="Unlimited users"><span class="opt-custom"></span><div><span class="opt-icon">👥</span> <span class="opt-text">Unlimited users / team members</span></div></label>
+      <label class="opt-label"><input type="checkbox" name="q11" value="Nothing"><span class="opt-custom"></span><div><span class="opt-icon">💬</span> <span class="opt-text">Nothing — I want to pay as little as possible</span></div></label>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION E ═══ -->
+  <div class="section-label">
+    <span class="section-pill">E</span>
+    <div class="section-line"></div>
+    <span class="section-name">Support & Community</span>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-card" id="card-12">
+    <div class="q-header">
+      <span class="q-num" id="num-12">12</span>
+      <div class="q-title">How valuable would an in-app chat feature with voice notes be for getting support? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Example: You send a voice message in Dutch and get an expert response within hours explaining your BTW question.</div>
+    <div class="error-msg">Please select a rating.</div>
+    <div class="scale-wrap">
+      <div class="scale-buttons" id="scale-q12">
+        <button type="button" class="scale-btn" data-val="1" data-group="q12">1</button>
+        <button type="button" class="scale-btn" data-val="2" data-group="q12">2</button>
+        <button type="button" class="scale-btn" data-val="3" data-group="q12">3</button>
+        <button type="button" class="scale-btn" data-val="4" data-group="q12">4</button>
+        <button type="button" class="scale-btn" data-val="5" data-group="q12">5</button>
+      </div>
+      <div class="scale-labels"><span>Not Valuable</span><span>Extremely Valuable</span></div>
+      <input type="hidden" name="q12" id="q12-val" value="">
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-card" id="card-13">
+    <div class="q-header">
+      <span class="q-num" id="num-13">13</span>
+      <div class="q-title">Would you attend in-person community training sessions to learn how to use the platform? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Small group workshops (8–15 people) held locally in Amsterdam, Rotterdam, Den Haag, Utrecht — on BTW, invoicing, payroll.</div>
+    <div class="error-msg">Please select an option to continue.</div>
+    <div class="options-grid">
+      <label class="opt-label"><input type="radio" name="q13" value="Yes definitely"><span class="opt-custom"></span><span class="opt-text">Yes, definitely!</span></label>
+      <label class="opt-label"><input type="radio" name="q13" value="Probably yes"><span class="opt-custom"></span><span class="opt-text">Probably yes</span></label>
+      <label class="opt-label"><input type="radio" name="q13" value="Online only"><span class="opt-custom"></span><span class="opt-text">I'd prefer online webinars</span></label>
+      <label class="opt-label"><input type="radio" name="q13" value="No"><span class="opt-custom"></span><span class="opt-text">No, not interested</span></label>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-card" id="card-14">
+    <div class="q-header">
+      <span class="q-num" id="num-14">14</span>
+      <div class="q-title">How likely are you to recommend SUM-MIT to a fellow entrepreneur if it solved your accounting problems? <span class="q-req">*</span></div>
+    </div>
+    <div class="q-hint">Rate from 1 (Would Not Recommend) to 5 (Would Definitely Recommend).</div>
+    <div class="error-msg">Please select a rating.</div>
+    <div class="scale-wrap">
+      <div class="scale-buttons" id="scale-q14">
+        <button type="button" class="scale-btn" data-val="1" data-group="q14">1</button>
+        <button type="button" class="scale-btn" data-val="2" data-group="q14">2</button>
+        <button type="button" class="scale-btn" data-val="3" data-group="q14">3</button>
+        <button type="button" class="scale-btn" data-val="4" data-group="q14">4</button>
+        <button type="button" class="scale-btn" data-val="5" data-group="q14">5</button>
+      </div>
+      <div class="scale-labels"><span>Would not recommend</span><span>Would definitely recommend</span></div>
+      <input type="hidden" name="q14" id="q14-val" value="">
+    </div>
+  </div>
+
+  <!-- ═══ SECTION F ═══ -->
+  <div class="section-label">
+    <span class="section-pill">F</span>
+    <div class="section-line"></div>
+    <span class="section-name">Your Voice</span>
+  </div>
+
+  <!-- Q15 optional -->
+  <div class="q-card" id="card-15">
+    <div class="q-header">
+      <span class="q-num" id="num-15">15</span>
+      <div class="q-title">What is the ONE thing an accounting app must do brilliantly to win your business?</div>
+    </div>
+    <div class="q-hint">Be honest — this directly shapes what we build first. Optional but very helpful.</div>
+    <textarea class="q-textarea" name="q15" placeholder="Share your thoughts here…" oninput="updateProgress()"></textarea>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <p>🔒 Anonymous · GDPR compliant · No personal data stored without consent.<br>Results used solely for SUM-MIT product development research.</p>
+    <button type="submit" class="submit-btn">Submit My Responses →</button>
+    <div class="submit-footer">Your response is anonymous and cannot be traced back to you.</div>
+  </div>
+
+</form>
+
+<!-- THANK YOU -->
+<div id="thank-you">
+  <div class="ty-emoji">🎉</div>
+  <div class="ty-title">Thank You!</div>
+  <div class="ty-body">Your responses have been recorded. You're helping build a better accounting tool for Dutch entrepreneurs. We'll share the results with all participants.</div>
+  <button class="ty-btn" onclick="resetSurvey()">← Fill Again</button>
+</div>
+
+</div><!-- /container -->
+
+<footer class="site-footer">
+  🇳🇱 SUM-MIT — All-in-One Accounting for the Netherlands & Germany<br>
+  This survey is conducted in compliance with GDPR / AVG. No personally identifiable information is collected without explicit consent.
+</footer>
+
+<script>
+// ──────────────────────────────────────────────
+// REQUIRED QUESTIONS CONFIG
+// ──────────────────────────────────────────────
+const TOTAL = 15;
+const REQUIRED = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]; // 15 is optional
+
+// ──────────────────────────────────────────────
+// SCALE BUTTONS
+// ──────────────────────────────────────────────
+document.querySelectorAll('.scale-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const group = btn.dataset.group;
+    // Deselect siblings
+    document.querySelectorAll(`.scale-btn[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    // Store value in hidden input
+    const hiddenId = group + '-val';
+    const hidden = document.getElementById(hiddenId);
+    if (hidden) hidden.value = btn.dataset.val;
+    // Mark card as answered
+    markAnswered('q' + group.replace('q',''));
+    updateProgress();
+  });
+});
+
+// ──────────────────────────────────────────────
+// Q6 TOOL SUB-SECTION TOGGLE
+// ──────────────────────────────────────────────
+document.querySelectorAll('input[name="q6_use"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const toolsDiv = document.getElementById('q6-tools');
+    toolsDiv.style.display = radio.value === 'never' ? 'none' : 'block';
+    updateProgress();
+  });
+});
+
+// ──────────────────────────────────────────────
+// PRICING CARD SELECTION
+// ──────────────────────────────────────────────
+document.querySelectorAll('.price-label input[type="radio"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    document.querySelectorAll('.price-label').forEach(l => l.classList.remove('selected'));
+    radio.closest('.price-label').classList.add('selected');
+    updateProgress();
+  });
+});
+
+// ──────────────────────────────────────────────
+// Q8 CHECKBOX TRACKING (BUG FIX)
+// ──────────────────────────────────────────────
+document.querySelectorAll('#q8-options input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const anyChecked = document.querySelectorAll('#q8-options input[type="checkbox"]:checked').length > 0;
+    document.getElementById('q8-valid').value = anyChecked ? 'yes' : '';
+    updateProgress();
+  });
+});
+
+// ──────────────────────────────────────────────
+// PROGRESS TRACKING
+// ──────────────────────────────────────────────
+function isAnswered(qNum) {
+  switch(qNum) {
+    case 1: return !!document.querySelector('input[name="q1"]:checked');
+    case 2: return !!document.querySelector('input[name="q2"]:checked');
+    case 3: return !!document.querySelector('input[name="q3"]:checked');
+    case 4: return document.querySelectorAll('input[name="q4"]:checked').length > 0;
+    case 5: return !!document.querySelector('input[name="q5"]:checked');
+    case 6: return !!document.querySelector('input[name="q6_use"]:checked');
+    case 7: return document.querySelectorAll('input[name="q7"]:checked').length > 0;
+    case 8: return document.querySelectorAll('#q8-options input[type="checkbox"]:checked').length > 0;
+    case 9: return !!document.getElementById('q9-val').value;
+    case 10: return !!document.querySelector('input[name="q10"]:checked');
+    case 11: return document.querySelectorAll('input[name="q11"]:checked').length > 0;
+    case 12: return !!document.getElementById('q12-val').value;
+    case 13: return !!document.querySelector('input[name="q13"]:checked');
+    case 14: return !!document.getElementById('q14-val').value;
+    case 15: return document.querySelector('textarea[name="q15"]').value.trim().length > 0;
+    default: return false;
+  }
+}
+
+function markAnswered(qId) {
+  // handled by updateProgress
+}
+
+function updateProgress() {
+  let count = 0;
+  for (let i = 1; i <= TOTAL; i++) {
+    const card = document.getElementById('card-' + i);
+    const numEl = document.getElementById('num-' + i);
+    if (isAnswered(i)) {
+      count++;
+      card.classList.add('answered');
+      numEl.classList.add('done');
+    } else {
+      card.classList.remove('answered');
+      numEl.classList.remove('done');
+    }
+  }
+  document.getElementById('prog-count').textContent = count;
+  const pct = (count / TOTAL) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+// Attach change listeners to all radio/checkbox inputs for live progress
+document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(inp => {
+  inp.addEventListener('change', updateProgress);
+});
+
+// ──────────────────────────────────────────────
+// FORM SUBMISSION (BUG FIX)
+// ──────────────────────────────────────────────
+document.getElementById('survey-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  let valid = true;
+  let firstError = null;
+
+  // Clear all errors
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('error'));
+
+  // Validate each required question
+  for (const qNum of REQUIRED) {
+    if (!isAnswered(qNum)) {
+      const card = document.getElementById('card-' + qNum);
+      card.classList.add('error');
+      if (!firstError) firstError = card;
+      valid = false;
+    }
+  }
+
+  if (!valid) {
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // All valid — show thank you
+  document.getElementById('survey-form').style.display = 'none';
+  document.querySelector('.section-label') && document.querySelectorAll('.section-label').forEach(s => s.style.display = 'none');
+  document.getElementById('thank-you').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Log collected data to console (replace with your API call)
+  const formData = new FormData(document.getElementById('survey-form') || e.target);
+  const data = {};
+  for (let [k,v] of formData.entries()) {
+    if (data[k]) {
+      data[k] = [].concat(data[k], v);
+    } else {
+      data[k] = v;
+    }
+  }
+  console.log('SUM-MIT Survey Submission:', data);
+});
+
+// ──────────────────────────────────────────────
+// RESET
+// ──────────────────────────────────────────────
+function resetSurvey() {
+  location.reload();
+}
+
+// ──────────────────────────────────────────────
+// HONEYPOT — hide don't-fill field
+// ──────────────────────────────────────────────
+const form = document.getElementById('survey-form');
+// Initial progress
+updateProgress();
+</script>
+</body>
+</html>
