@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SUM-MIT | Survey Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange: #E8521A;
+  --orange-light: #FDF0EA;
+  --navy: #0F1F3D;
+  --navy-mid: #1E3260;
+  --slate: #4A5568;
+  --muted: #718096;
+  --border: #E2E8F0;
+  --bg: #F7F8FA;
+  --white: #FFFFFF;
+  --green: #22863A;
+  --green-light: #EAFBF0;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(15,31,61,0.08);
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--navy); min-height: 100vh; }
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 28px; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark { width: 36px; height: 36px; background: var(--orange); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; }
+.logo-text { font-weight: 700; font-size: 17px; letter-spacing: -0.3px; }
+.logo-sub { font-size: 11px; color: var(--muted); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.header-btn {
+  border: 1px solid var(--border); background: var(--white); border-radius: 8px;
+  padding: 7px 16px; font-size: 13px; font-weight: 500; cursor: pointer;
+  font-family: inherit; color: var(--slate); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s;
+}
+.header-btn:hover { border-color: var(--orange); color: var(--orange); }
+.header-btn.primary { background: var(--orange); color: white; border-color: var(--orange); }
+.header-btn.primary:hover { background: #C9401A; }
+
+/* ── LOGIN OVERLAY ── */
+#login-screen {
+  position: fixed; inset: 0; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  display: flex; align-items: center; justify-content: center; z-index: 999;
+}
+.login-card {
+  background: white; border-radius: 20px; padding: 48px 40px;
+  width: 100%; max-width: 400px; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+}
+.login-logo { width: 52px; height: 52px; background: var(--orange); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px; margin: 0 auto 20px; }
+.login-title { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 6px; }
+.login-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.login-input {
+  width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px;
+  font-family: inherit; font-size: 15px; outline: none; transition: border-color 0.2s; margin-bottom: 12px;
+}
+.login-input:focus { border-color: var(--orange); }
+.login-input.error { border-color: #E53E3E; }
+.login-btn {
+  width: 100%; padding: 13px; background: var(--orange); color: white; border: none;
+  border-radius: 10px; font-size: 15px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: background 0.2s;
+}
+.login-btn:hover { background: #C9401A; }
+.login-error { color: #E53E3E; font-size: 13px; margin-top: 8px; display: none; }
+
+/* ── DASHBOARD MAIN ── */
+#dashboard { display: none; }
+.dash-container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ── KPI CARDS ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.kpi-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow);
+}
+.kpi-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+.kpi-value { font-size: 32px; font-weight: 700; color: var(--navy); line-height: 1; }
+.kpi-value span { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+.kpi-card.highlight { border-left: 3px solid var(--orange); }
+
+/* ── SECTION HEADER ── */
+.section-header { display: flex; align-items: center; gap: 12px; margin: 36px 0 16px; }
+.section-pill { background: var(--navy); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; }
+.section-line { flex: 1; height: 1px; background: var(--border); }
+
+/* ── CHART CARDS ── */
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.charts-grid.single { grid-template-columns: 1fr; }
+.chart-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow);
+}
+.chart-card.wide { grid-column: 1 / -1; }
+.chart-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.chart-sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+.chart-wrap { position: relative; height: 220px; }
+.chart-wrap.tall { height: 280px; }
+.chart-wrap.short { height: 160px; }
+
+/* ── SCALE BAR ── */
+.scale-summary { display: flex; flex-direction: column; gap: 10px; }
+.scale-row { display: flex; align-items: center; gap: 10px; }
+.scale-num { width: 20px; font-size: 13px; font-weight: 600; color: var(--navy); text-align: center; flex-shrink: 0; }
+.scale-bar-bg { flex: 1; height: 24px; background: var(--border); border-radius: 6px; overflow: hidden; }
+.scale-bar-fill { height: 100%; background: var(--orange); border-radius: 6px; transition: width 0.6s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+.scale-bar-fill span { font-size: 11px; font-weight: 700; color: white; }
+.scale-avg { font-size: 24px; font-weight: 700; color: var(--orange); text-align: center; margin-top: 12px; }
+.scale-avg-label { font-size: 12px; color: var(--muted); text-align: center; }
+
+/* ── MULTI-SELECT BARS ── */
+.bar-list { display: flex; flex-direction: column; gap: 10px; }
+.bar-item { }
+.bar-item-top { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.bar-item-label { font-size: 13px; color: var(--slate); }
+.bar-item-count { font-size: 13px; font-weight: 600; color: var(--navy); }
+.bar-item-bg { height: 8px; background: var(--border); border-radius: 100px; overflow: hidden; }
+.bar-item-fill { height: 100%; background: var(--orange); border-radius: 100px; transition: width 0.6s ease; }
+
+/* ── TABLE ── */
+.responses-table-wrap { overflow-x: auto; margin-top: 8px; }
+.responses-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.responses-table th { background: var(--bg); padding: 10px 14px; text-align: left; font-weight: 600; color: var(--muted); border-bottom: 2px solid var(--border); white-space: nowrap; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.responses-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--slate); vertical-align: top; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.responses-table tr:last-child td { border-bottom: none; }
+.responses-table tr:hover td { background: var(--orange-light); }
+.tag { display: inline-block; background: var(--orange-light); color: var(--orange); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; margin: 1px; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state h3 { font-size: 18px; color: var(--navy); margin-bottom: 8px; }
+.empty-state p { font-size: 14px; max-width: 360px; margin: 0 auto; }
+
+/* ── NO DATA PILL ── */
+.no-data { font-size: 13px; color: var(--muted); text-align: center; padding: 32px; }
+
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .chart-card.wide { grid-column: auto; }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .login-card { padding: 32px 24px; margin: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">SM</div>
+    <div class="login-title">Response Analytics</div>
+    <div class="login-sub">Enter the dashboard password to view survey results.</div>
+    <input type="password" id="pw-input" class="login-input" placeholder="Password" />
+    <button class="login-btn" onclick="tryLogin()">Unlock Dashboard</button>
+    <div class="login-error" id="login-error">Incorrect password. Please try again.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <header class="site-header">
+    <div class="logo">
+      <div class="logo-mark">SM</div>
+      <div>
+        <div class="logo-text">SUM-MIT</div>
+        <div class="logo-sub">Dashboard</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="https://onealphamed.github.io/SUM-MIT-/" target="_blank" class="header-btn">🔗 View Live Survey</a>
+      <button class="header-btn" onclick="copySurveyLink()" id="copy-btn">📋 Copy Survey Link</button>
+      <button class="header-btn" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="header-btn" onclick="loadData()">↻ Refresh</button>
+      <button class="header-btn" onclick="clearAllData()" style="color:#E53E3E;">🗑 Clear Data</button>
+    </div>
+  </header>
+
+  <!-- INFO BANNER -->
+  <div id="sync-info" style="background:#EBF4FF;border-bottom:1px solid #BEE3F8;padding:10px 28px;font-size:13px;color:#2B6CB0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <span>ℹ️</span>
+    <span><strong>How responses appear here:</strong> When someone fills out the survey on the <strong>same device & browser</strong> as this dashboard, their response is saved automatically. Share the survey link: </span>
+    <a href="https://onealphamed.github.io/SUM-MIT-/" target="_blank" style="color:#2B6CB0;font-weight:600;text-decoration:underline;">https://onealphamed.github.io/SUM-MIT-/</a>
+    <button onclick="document.getElementById('sync-info').style.display='none'" style="margin-left:auto;background:none;border:none;cursor:pointer;color:#718096;font-size:16px;" title="Dismiss">✕</button>
+  </div>
+
+  <div class="dash-container">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Total Responses</div>
+        <div class="kpi-value" id="kpi-total">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg NPS Score</div>
+        <div class="kpi-value" id="kpi-nps">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Top Pain Point</div>
+        <div class="kpi-value" id="kpi-pain" style="font-size:16px;line-height:1.3;margin-top:4px;">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Mobile Interest</div>
+        <div class="kpi-value" id="kpi-mobile">—</div>
+      </div>
+    </div>
+
+    <!-- SECTION A -->
+    <div class="section-header"><span class="section-pill">A</span><div class="section-line"></div><span style="font-size:13px;color:var(--muted);font-weight:500;">Business Profile</span></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Q1: Business Type</div>
+        <div class="chart-sub">What type of business do you have?</div>
+        <div class="chart-wrap"><canvas id="chart-q1"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Q2: Employee Count</div>
+        <div class="chart-sub">How many people work in your business?</div>
+        <div class="chart-wrap"><canvas id="chart-q2"></canvas></div>
+      </div>
+      <div class="chart-card wide">
+        <div class="chart-title">Q3: Business Sector</div>
+        <div class="chart-sub">What sector does your business operate in?</div>
+        <div class="chart-wrap"><canvas id="chart-q3"></canvas></div>
+      </div>
+    </div>
+
+    <!-- SECTION B -->
+    <div class="section-header"><span class="section-pill">B</span><div class="section-line"></div><span style="font-size:13px;color:var(--muted);font-weight:500;">Current Accounting Situation</span></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Q4: Current Accounting Method</div>
+        <div class="chart-sub">Multi-select — % of respondents who selected each</div>
+        <div class="bar-list" id="chart-q4"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Q5: Biggest Pain Point</div>
+        <div class="chart-sub">Single biggest frustration</div>
+        <div class="chart-wrap"><canvas id="chart-q5"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Q6: Digital Tool Experience</div>
+        <div class="chart-sub">Have you used digital accounting tools?</div>
+        <div class="chart-wrap short"><canvas id="chart-q6"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Q7: Tool Challenges</div>
+        <div class="chart-sub">Multi-select — gaps users want solved</div>
+        <div class="bar-list" id="chart-q7"></div>
+      </div>
+    </div>
+
+    <!-- SECTION C -->
+    <div class="section-header"><span class="section-pill">C</span><div class="section-line"></div><span style="font-size:13px;color:var(--muted);font-weight:500;">SUM-MIT App Utility</span></div>
+    <div class="charts-grid">
+      <div class="chart-card wide">
+        <div class="chart-title">Q8: Feature Usefulness</div>
+        <div class="chart-sub">Select all features you would actively use — % selected</div>
+        <div class="bar-list" id="chart-q8"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Q9: Mobile App Likelihood</div>
+        <div class="chart-sub">1 = Very Unlikely, 5 = Very Likely</div>
+        <div class="scale-summary" id="scale-q9"></div>
+      </div>
+    </div>
+
+    <!-- SECTION D -->
+    <div class="section-header"><span class="section-pill">D</span><div class="section-line"></div><span style="font-size:13px;color:var(--muted);font-weight:500;">Pricing Comfort</span></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Q10: Pricing Comfort</div>
+        <div class="chart-sub">Comfortable monthly subscription price</div>
+        <div class="chart-wrap"><canvas id="chart-q10"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Q11: Pay More For</div>
+        <div class="chart-sub">Features worth paying more for (multi-select)</div>
+        <div class="bar-list" id="chart-q11"></div>
+      </div>
+    </div>
+
+    <!-- SECTION E -->
+    <div class="section-header"><span class="section-pill">E</span><div class="section-line"></div><span style="font-size:13px;color:var(--muted);font-weight:500;">Support & Community</span></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Q12: In-App Chat Value</div>
+        <div class="chart-sub">1 = Not Valuable, 5 = Extremely Valuable</div>
+        <div class="scale-summary" id="scale-q12"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Q13: Training Sessions</div>
+        <div class="chart-sub">Would you attend in-person training?</div>
+        <div class="chart-wrap short"><canvas id="chart-q13"></canvas></div>
+      </div>
+      <div class="chart-card wide">
+        <div class="chart-title">Q14: NPS — Recommendation Likelihood</div>
+        <div class="chart-sub">1 = Would Not Recommend, 5 = Would Definitely Recommend</div>
+        <div class="scale-summary" id="scale-q14"></div>
+      </div>
+    </div>
+
+    <!-- SECTION F -->
+    <div class="section-header"><span class="section-pill">F</span><div class="section-line"></div><span style="font-size:13px;color:var(--muted);font-weight:500;">Your Voice</span></div>
+    <div class="chart-card" style="margin-bottom:16px;">
+      <div class="chart-title">Q15: Open Text Responses</div>
+      <div class="chart-sub">Additional comments and feedback</div>
+      <div id="q15-responses" style="margin-top:8px;"></div>
+    </div>
+
+    <!-- ALL RESPONSES TABLE -->
+    <div class="section-header"><span class="section-pill">◎</span><div class="section-line"></div><span style="font-size:13px;color:var(--muted);font-weight:500;">All Individual Responses</span></div>
+    <div class="chart-card">
+      <div id="table-wrap"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────
+const STORAGE_KEY = 'summit_survey_responses';
+const CORRECT_PW  = 'summit2026';
+
+// Chart colour palette
+const PALETTE = [
+  '#E8521A','#1E3260','#F4A07A','#0F1F3D','#FCD5B8',
+  '#4A5568','#22863A','#718096','#C9401A','#A0AEC0'
+];
+
+let chartInstances = {};
+
+// ─────────────────────────────────────────────
+// LOGIN
+// ─────────────────────────────────────────────
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') tryLogin();
+});
+
+function tryLogin() {
+  const val = document.getElementById('pw-input').value.trim();
+  const errEl = document.getElementById('login-error');
+  const inputEl = document.getElementById('pw-input');
+  if (val === CORRECT_PW) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadData();
+  } else {
+    inputEl.classList.add('error');
+    errEl.style.display = 'block';
+    inputEl.value = '';
+    inputEl.focus();
+    setTimeout(() => { inputEl.classList.remove('error'); }, 1500);
+  }
+}
+
+// ─────────────────────────────────────────────
+// LOAD & PARSE DATA
+// ─────────────────────────────────────────────
+function loadData() {
+  let responses = [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) responses = JSON.parse(raw);
+    if (!Array.isArray(responses)) responses = [];
+  } catch(e) { responses = []; }
+
+  renderAll(responses);
+}
+
+// ─────────────────────────────────────────────
+// RENDER ALL
+// ─────────────────────────────────────────────
+function renderAll(responses) {
+  const n = responses.length;
+  document.getElementById('kpi-total').textContent = n;
+
+  if (n === 0) {
+    showEmptyStates();
+    return;
+  }
+
+  // KPIs
+  const npsAvg = avg(responses.map(r => parseFloat(r.q14)).filter(Boolean));
+  const mobileAvg = avg(responses.map(r => parseFloat(r.q9)).filter(Boolean));
+  document.getElementById('kpi-nps').textContent = npsAvg ? npsAvg.toFixed(1) : '—';
+  document.getElementById('kpi-mobile').textContent = mobileAvg ? mobileAvg.toFixed(1) : '—';
+
+  const painCounts = countSingle(responses, 'q5');
+  const topPain = Object.entries(painCounts).sort((a,b) => b[1]-a[1])[0];
+  document.getElementById('kpi-pain').textContent = topPain ? topPain[0] : '—';
+
+  // Pie/Bar charts
+  renderPie('chart-q1', countSingle(responses, 'q1'));
+  renderPie('chart-q2', countSingle(responses, 'q2'));
+  renderBar('chart-q3', countSingle(responses, 'q3'));
+  renderMultiBar('chart-q4', countMulti(responses, 'q4'), n, [
+    ['accountant','External Accountant'],['software','Accounting Software'],
+    ['spreadsheets','Spreadsheets'],['paper','Paper / Informal'],['none','No System']
+  ]);
+  renderPie('chart-q5', countSingle(responses, 'q5'));
+  renderPie('chart-q6', countSingle(responses, 'q6_use'));
+  renderMultiBar('chart-q7', countMulti(responses, 'q7'), n, null);
+  renderMultiBar('chart-q8', countMulti(responses, 'q8'), n, null);
+  renderScale('scale-q9', responses.map(r => r.q9), '9');
+  renderPie('chart-q10', countSingle(responses, 'q10'));
+  renderMultiBar('chart-q11', countMulti(responses, 'q11'), n, null);
+  renderScale('scale-q12', responses.map(r => r.q12), '12');
+  renderPie('chart-q13', countSingle(responses, 'q13'));
+  renderScale('scale-q14', responses.map(r => r.q14), '14');
+
+  // Q15 text
+  renderTextResponses(responses);
+
+  // Table
+  renderTable(responses);
+}
+
+// ─────────────────────────────────────────────
+// CHART HELPERS
+// ─────────────────────────────────────────────
+function destroyChart(id) {
+  if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+}
+
+function renderPie(canvasId, counts) {
+  destroyChart(canvasId);
+  const el = document.getElementById(canvasId);
+  if (!el) return;
+  const entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  if (!entries.length) { el.parentElement.innerHTML = '<div class="no-data">No data yet</div>'; return; }
+  chartInstances[canvasId] = new Chart(el, {
+    type: 'doughnut',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{ data: entries.map(e => e[1]), backgroundColor: PALETTE, borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { font: { family: 'DM Sans', size: 12 }, padding: 12, boxWidth: 12 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} (${Math.round(ctx.raw/ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0)*100)}%)` } }
+      }
+    }
+  });
+}
+
+function renderBar(canvasId, counts) {
+  destroyChart(canvasId);
+  const el = document.getElementById(canvasId);
+  if (!el) return;
+  const entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  if (!entries.length) { el.parentElement.innerHTML = '<div class="no-data">No data yet</div>'; return; }
+  chartInstances[canvasId] = new Chart(el, {
+    type: 'bar',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{ data: entries.map(e => e[1]), backgroundColor: PALETTE[0], borderRadius: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#F0F0F0' }, ticks: { font: { family: 'DM Sans', size: 11 } } },
+        y: { grid: { display: false }, ticks: { font: { family: 'DM Sans', size: 12 } } }
+      }
+    }
+  });
+}
+
+function renderMultiBar(containerId, counts, total, labelMap) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  let entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  if (!entries.length) { el.innerHTML = '<div class="no-data">No data yet</div>'; return; }
+  const max = entries[0][1];
+
+  // Apply label map if provided
+  if (labelMap) {
+    entries = labelMap.map(([key, label]) => [label, counts[key] || 0]).sort((a,b) => b[1]-a[1]);
+  }
+
+  el.innerHTML = entries.map(([label, count]) => {
+    const pct = total > 0 ? Math.round(count / total * 100) : 0;
+    const barW = max > 0 ? Math.round(count / max * 100) : 0;
+    return `<div class="bar-item">
+      <div class="bar-item-top">
+        <span class="bar-item-label">${label}</span>
+        <span class="bar-item-count">${count} <span style="color:var(--muted);font-weight:400">(${pct}%)</span></span>
+      </div>
+      <div class="bar-item-bg"><div class="bar-item-fill" style="width:${barW}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderScale(containerId, values, qKey) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const nums = values.map(v => parseInt(v)).filter(v => v >= 1 && v <= 5);
+  if (!nums.length) { el.innerHTML = '<div class="no-data">No data yet</div>'; return; }
+
+  const dist = {1:0,2:0,3:0,4:0,5:0};
+  nums.forEach(v => dist[v]++);
+  const maxCount = Math.max(...Object.values(dist));
+  const avgVal = avg(nums);
+
+  el.innerHTML = [1,2,3,4,5].map(i => {
+    const count = dist[i];
+    const w = maxCount > 0 ? Math.round(count / maxCount * 100) : 0;
+    return `<div class="scale-row">
+      <span class="scale-num">${i}</span>
+      <div class="scale-bar-bg">
+        <div class="scale-bar-fill" style="width:${w}%">
+          ${count > 0 ? `<span>${count}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('') + `<div class="scale-avg">${avgVal.toFixed(1)} <span style="font-size:14px;color:var(--muted);">/ 5</span></div><div class="scale-avg-label">Average rating</div>`;
+}
+
+function renderTextResponses(responses) {
+  const el = document.getElementById('q15-responses');
+  const texts = responses.map(r => r.q15).filter(t => t && t.trim());
+  if (!texts.length) {
+    el.innerHTML = '<div class="no-data">No text responses yet</div>';
+    return;
+  }
+  el.innerHTML = texts.map((t, i) => `
+    <div style="padding:12px 16px;background:var(--bg);border-radius:8px;margin-bottom:8px;font-size:14px;color:var(--slate);border-left:3px solid var(--orange);">
+      <span style="font-size:11px;color:var(--muted);font-weight:600;">RESPONSE ${i+1}</span><br/>
+      ${escHtml(t)}
+    </div>`).join('');
+}
+
+function renderTable(responses) {
+  const el = document.getElementById('table-wrap');
+  if (!responses.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><h3>No responses yet</h3><p>Share your survey link to start collecting responses.</p></div>';
+    return;
+  }
+  const headers = ['#','Business Type','Employees','Sector','Pain Point','Tool Exp.','Pricing','NPS','Mobile','Q15 Comment'];
+  const rows = responses.map((r, i) => `<tr>
+    <td>${i+1}</td>
+    <td>${escHtml(r.q1||'—')}</td>
+    <td>${escHtml(r.q2||'—')}</td>
+    <td>${escHtml(r.q3||'—')}</td>
+    <td>${escHtml(r.q5||'—')}</td>
+    <td>${escHtml(r.q6_use||'—')}</td>
+    <td>${escHtml(r.q10||'—')}</td>
+    <td>${escHtml(r.q14||'—')}</td>
+    <td>${escHtml(r.q9||'—')}</td>
+    <td title="${escHtml(r.q15||'')}">${escHtml((r.q15||'').slice(0,60))}${(r.q15||'').length>60?'…':''}</td>
+  </tr>`).join('');
+  el.innerHTML = `<div class="responses-table-wrap">
+    <table class="responses-table">
+      <thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+function showEmptyStates() {
+  const empties = ['chart-q4','chart-q7','chart-q8','chart-q11','scale-q9','scale-q12','scale-q14','q15-responses'];
+  empties.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '<div class="no-data">No data yet</div>';
+  });
+  document.getElementById('table-wrap').innerHTML = `
+    <div class="empty-state">
+      <div class="icon">📭</div>
+      <h3>No responses yet</h3>
+      <p>Share your survey link to start collecting responses. They'll appear here automatically.</p>
+    </div>`;
+  document.getElementById('kpi-nps').textContent = '—';
+  document.getElementById('kpi-mobile').textContent = '—';
+  document.getElementById('kpi-pain').textContent = '—';
+}
+
+// ─────────────────────────────────────────────
+// DATA UTILS
+// ─────────────────────────────────────────────
+function countSingle(responses, key) {
+  const counts = {};
+  responses.forEach(r => {
+    const val = r[key];
+    if (val) counts[val] = (counts[val] || 0) + 1;
+  });
+  return counts;
+}
+
+function countMulti(responses, key) {
+  const counts = {};
+  responses.forEach(r => {
+    const val = r[key];
+    if (!val) return;
+    const arr = Array.isArray(val) ? val : [val];
+    arr.forEach(v => { if (v) counts[v] = (counts[v] || 0) + 1; });
+  });
+  return counts;
+}
+
+function avg(arr) {
+  if (!arr.length) return 0;
+  return arr.reduce((a,b) => a + b, 0) / arr.length;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─────────────────────────────────────────────
+// EXPORT CSV
+// ─────────────────────────────────────────────
+function exportCSV() {
+  let responses = [];
+  try { responses = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
+  if (!responses.length) { alert('No responses to export.'); return; }
+
+  const keys = ['q1','q2','q3','q4','q5','q6_use','q6_tools','q7','q8','q9','q10','q11','q12','q13','q14','q15','q6_satisfaction','timestamp'];
+  const headers = ['Business Type','Employees','Sector','Accounting Methods','Pain Point','Tool Experience','Tools Used','Tool Challenges','Useful Features','Mobile Likelihood','Pricing','Pay More For','Chat Value','Training','NPS','Open Comment','Tool Satisfaction','Timestamp'];
+
+  const escape = v => {
+    const s = Array.isArray(v) ? v.join('; ') : String(v||'');
+    return `"${s.replace(/"/g,'""')}"`;
+  };
+
+  const csv = [headers.join(',')]
+    .concat(responses.map(r => keys.map(k => escape(r[k])).join(',')))
+    .join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `summit-survey-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─────────────────────────────────────────────
+// COPY SURVEY LINK
+// ─────────────────────────────────────────────
+function copySurveyLink() {
+  const url = 'https://onealphamed.github.io/SUM-MIT-/';
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
+  }).catch(() => {
+    prompt('Copy this survey link:', url);
+  });
+}
+
+// ─────────────────────────────────────────────
+// CLEAR DATA (dev utility)
+// ─────────────────────────────────────────────
+function clearAllData() {
+  if (confirm('Delete ALL survey responses? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    loadData();
+  }
+}
+</script>
+</body>
+</html>
